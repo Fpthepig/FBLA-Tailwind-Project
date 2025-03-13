@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      @keyframes shine {
+        0% { -webkit-mask-position: 200% 0; }
+        100% { -webkit-mask-position: -200% 0; }
+      }
+
+      @keyframes scaleHold {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.8); }
+        100% { transform: scale(1); }
+      }  
+
+      [data-type="Wolf"] {
+  background: url("https://i.ibb.co/bXW3hg4/Wolf.png");
+  background-size: cover;
+  background-color: #4d824d;
+  /* do a gradient going from grey at the top down to #4d824d for all the enemies */
+} 
+
+[data-type="Spider"] {
+  background: url("https://i.ibb.co/3NyJ1Bz/Untitled-01-15-2025-01-13-49.png");
+  background-size: cover;
+  background-color: #4d824d;
+} 
+
+[data-type="Skeleton Knight"] {
+  background: url("https://i.ibb.co/s1BFsH6/Skeleton-Knight.png");
+  background-size: cover;
+} 
+
+[data-type="Slime"] {
+  background: url("https://i.ibb.co/FYJwpNL/Slime.png");
+  background-size: cover;
+}
+
+      .card {
+      perspective: 250px; /* Add perspective for 3D effect */
+      width: 100px;
+      height: 150px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer; 
+      
+     
+      
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg); /* Flip the card */
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s; 
+      backface-visibility: hidden;
+      
+    }
+
+    
+
+    .front {
+      background-color: #34a34a; /* Front side color */
+    }
+
+    .back {
+      background-color: #ffffff; /* Back side color */
+      transform: rotateY(180deg); /* Initially hide the back side */
+    }
+
+    /* Unused CSS (kept for reference) */
+    .card-inner2 {
+      
+       position:relative; 
+       
+    } 
+
+    .card-inner:hover{
+      transform: rotateY(180deg);
+    }
+
+    .card:hover {
+      cursor: pointer;
+      
+    }
+
+    .ffront,
+    .fback,
+    .lback,
+    .back,
+    .front {
+      height: 100%;
+      width: 100%;
+      box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25);
+      border-radius: 8px;
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+    }
+
+    .lback {
+      transform: rotateY(180deg);
+
+    }
+
+    .fback {
+      transform: rotateY(180deg);
+    }
+
+    .back {
+      transform: rotateY(180deg);
+    }
+
+    .ffront {
+      background-color: #34a34a;
+      transform: rotateY(180deg);
+    }
+
+    .front {
+      background-color: #34a34a;
+      transform: rotateY(180deg);
+    }
+
+    .hvy.effect-shine,
+    .mid.effect-shine,
+    div.effect-shine {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      background: #fff;
+      color: grey;
+      transition: background-color 0.3s;
+      z-index: 1;
+    }
+
+    .hvy.effect-shine:hover {
+      background: linear-gradient(
+        -75deg,
+        rgba(45, 45, 0, 0.6) 30%,
+        #ff2400 50%,
+        rgba(60, 60, 0, 0.6) 70%
+      );
+      -webkit-mask-image: linear-gradient(
+        -75deg,
+        rgba(45, 45, 45, 0.6) 30%,
+        #ff3 50%,
+        rgba(45, 45, 45, 0.6) 70%
+      );
+      -webkit-mask-size: 200%;
+      animation: shine 2s infinite;
+    }
+
+    .mid.effect-shine:hover {
+      background: linear-gradient(
+        -75deg,
+        rgba(45, 45, 0, 0.6) 30%,
+        #2e6ca0 50%,
+        rgba(60, 60, 0, 0.6) 70%
+      );
+      -webkit-mask-image: linear-gradient(
+        -75deg,
+        rgba(45, 45, 45, 0.6) 30%,
+        #fff 50%,
+        rgba(45, 45, 45, 0.6) 70%
+      );
+      -webkit-mask-size: 200%;
+      animation: shine 2s infinite;
+    }
+
+    div.effect-shine:hover {
+      background: linear-gradient(
+        -75deg,
+        rgba(125, 125, 0, 0.6) 30%,
+        #ffff00 50%,
+        rgba(125, 125, 0, 0.6) 70%
+      );
+      -webkit-mask-image: linear-gradient(
+        -75deg,
+        rgba(45, 45, 45, 0.6) 30%,
+        #000 50%,
+        rgba(45, 45, 45, 0.6) 70%
+      );
+      -webkit-mask-size: 200%;
+      animation: shine 2s infinite; 
+      
+    } 
+
+    h6{
+      font-size: 8px;
+    }
+
+    card-text{
+      transform: rotateY(180deg);
+    }
+
+
+    </style>
+
+  </head>
+  <body class="font-sans bg-black text-white m-0 p-0 flex flex-col items-center justify-center h-screen overflow-hidden">
+    <div id="game" class = " relative w-4/5 h-4/5 border-2 border-white bg-gray-900 flex flex-col justify-between " >
+      <div id="activeCardSlot" class = " absolute top-2.5 left-2.5 bg-black bg-opacity-70 p-2.5 rounded-lg">Active Weapon: None</div>
+
+      <div id="playerHealthDisplay" class = " absolute top-2.5 right-2.5 bg-black bg-opacity-70 p-2.5 rounded-lg">Health: 100</div>
+
+      <div id="controls" class="absolute bottom-2.5 right-2.5 bg-black bg-opacity-70 p-2.5 rounded-lg">
+        Controls: <br />
+        - Press <strong>I</strong> to open the inventory<br />
+        - Press <strong>K</strong> to open Lore Menu. <br />
+        - Press <strong>P</strong> to toggle Controls visibility. <br />
+        - Left-click an enemy cube to start combat.
+      </div>
+
+      <div id="enemies" class = "flex justify-around mt-12">
+        <div class="enemy w-24 h-24 bg-gray-500 text-center leading-[50px] cursor-pointer border border-white" data-type="Slime">Slime</div>
+        <div class="enemy w-24 h-24 bg-gray-500 text-center leading-[50px] cursor-pointer border border-green " data-type="Spider">Spider</div>
+        <div class="enemy w-24 h-24 bg-gray-500 text-center leading-[50px] cursor-pointer border border-green" data-type="Wolf">Wolf</div>
+        <div class="enemy w-24 h-24 bg-gray-500 text-center leading-[50px] cursor-pointer border border-white" data-type="Skeleton Knight">Skeleton Knight</div>
+      </div>
+
+      <div id="loreModal" class="modal fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center hidden" style="display: none">
+        <div class="modal-content bg-gray-800 p-1 rounded-sm text-center">
+          <div id="carouselContainer" class="flex items-center justify-center gap-2.5">
+            <button id="prevButton" class="bg-blue-500 text-white px-4 py-2 rounded">Previous</button>
+            <div id="loreContent" class="w-72 text-center bg-black bg-opacity-80 p-5 rounded-lg text-white"></div>
+            <button id="nextButton" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+          </div>
+          <button id="closeLoreModal" class = "bg-red-500 text-white px-4 py-2 rounded mt-4">Close</button>
+        </div>
+      </div>
+
+      <div id="combatArea" class="hidden text-center p-5">
+        <div id="combatEnemyHealth" >Enemy Health: 100</div>
+
+        <div id="combatPlayerHealth">Player Health: 100</div>
+
+        <div id="combatActions"  class="flex justify-center gap-4 mt-4">
+          <button id="fightButton" class="bg-red-500 text-white px-4 py-2 rounded">Fight</button>
+          <button id="actionButton" class="bg-green-500 text-white px-4 py-2 rounded">Heal</button>
+          <button id="evadeButton" class="bg-yellow-500 text-white px-4 py-2 rounded">Dodge</button>
+          <button id="mercyButton" class="bg-blue-500 text-white px-4 py-2 rounded" >Mercy</button>
+        </div>
+
+        <div id="combatSkills" class="hidden"></div>
+      </div>
+
+      <div id="activeSlot" class="active-slot hidden absolute top-[-12px] left-2 w-28 h-40 border-3 border-dashed border-blue-500 flex items-center justify-center bg-white"  >
+        Active Card Slot
+      </div>
+
+      <div class="modal hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center" id="inventoryModal" style="display: none">
+        <div class="modal-content bg-gray-800 p-5 rounded-lg text-center">
+          <h2 class="text-2xl mb-4">Inventory</h2>
+          <div class="inventory">
+            <div id="physicalWeapons">
+              <h3 class="text-xl mb-2">Physical Weapons</h3>
+              <div class="cardrow flex gap-4">
+                <div class = "card-inner2">
+                <div
+                  class="card effect-shine w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer"
+                  data-type="light_melee"
+                  onclick="flipCard(this)"
+                >
+                  Light-Melee
+                </div>  
+                </div>
+                <div class="card-inner2">
+                <div class="card mid effect-shine w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer" data-type="medium_melee">
+                  Medium Melee
+                </div>
+                </div>
+                
+                <div class="card-inner2">
+                <div class="card hvy effect-shine w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer" data-type="heavy_melee">
+                 <div class="card-text">
+                  Heavy Melee
+                  </div>
+                </div>
+                </div>
+               
+              </div>
+            </div>
+
+            <div id="magicWeapons" class="mt-6" >
+              <h3 class="text-xl mb-2">Magic Weapons</h3>
+              <div class="cardrow flex gap-4">
+                <div
+                  class="card w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer "
+
+                  data-type="fire_magic"
+                  onclick="flipCard(this)"
+
+                >
+                  <div class="card-inner w-full h-full relative" >
+                    <div class="front absolute w-full h-full bg-green-500 rounded-lg" ></div>
+                    <div class="fback absolute w-full h-full bg-cover bg-center rounded-lg " style="background-image: url('https://cdn.pixabay.com/photo/2011/08/17/14/38/fire-8837_1280.jpg');" >
+                      <h5 class="text-white">Fire Magic</h5>
+                 
+                      <h6 class="text-white text-">
+                        Firepower is the capacity to deliver destructive force
+                        effectively using weapons, energy, or explosive
+                        capabilities.
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer"
+                  data-type="ice_magic"
+                  onclick="flipCard(this)"
+                >
+                  <div class="card-inner w-full h-full relative " >
+                    <div class="front absolute w-full h-full bg-green-500 rounded-lg"></div>
+                    <div class="back absolute w-full h-full bg-cover bg-center rounded-lg" style="background-image: url('https://cdn.pixabay.com/photo/2019/12/03/13/40/winter-4670078_1280.jpg');" >
+                      <h5 class="text-white">Ice Magic</h5>
+                      <h6 class="text-white text-xs">
+                        Harnesses the power of frost and cold, enabling users to
+                        freeze objects and summon blizzards.
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="card w-24 h-36 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer"
+                  data-type="lightning_magic"
+                  onclick="flipCard(this)"
+                >
+                  <div class="card-inner  w-full h-full relative  ">
+                    <div class="front absolute w-full h-full bg-green-500 rounded-lg"></div>
+                    <div class="lback absolute w-full h-full bg-cover bg-center rounded-lg" style="background-image: url('https://cdn.pixabay.com/photo/2014/07/23/02/41/lightning-399853_1280.jpg');">
+                      <h5 class="text-white">Lightning Power</h5>
+                      <h6 class="text-white text-[8px]">
+                        Delivers devastating, precise electrical strikes,
+                        overwhelming foes with immense energy bursts.
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="enemyCounter">Enemies Defeated: 0</div>
+              <button id="closeModal">Close Inventory</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="gameOverScreen" class="fixed top-0 left-0 w-full h-full bg-black text-white flex flex-col items-center justify-center" style="display: none">
+        <h1>Game Over</h1>
+        <p>You tried your best!</p>
+        <button id="restartGame" class >Restart Game</button>
+      </div>
+    </div>
+
+    <script src="js/test.js"></script>
+  </body>
+</html>

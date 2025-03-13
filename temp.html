@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+    <div id="game">
+
+        <div id="activeCardSlot">Active Weapon: None</div>
+
+        <div id="playerHealthDisplay">Health: 100</div>
+
+        <div id="controls">
+            Controls: <br>
+            - Press <strong>I</strong><br>
+            - Left-click an enemy cube to start combat.
+        </div>
+
+        <div id="enemies">
+            <div class="enemy" data-type="Slime">Slime</div>
+            <div class="enemy" data-type="Spider">Spider</div>
+            <div class="enemy" data-type="Wolf">Wolf</div>
+            <div class="enemy" data-type="Skeleton Knight">Skeleton Knight</div>
+        </div>
+
+        <div id="combatArea" style="display: none;">
+
+            <div id="combatEnemyHealth">
+                Enemy Health: 100
+            </div>
+
+            <div id="combatPlayerHealth">
+                Player Health: 100
+            </div>
+
+            <div id="combatActions">
+                <button id="fightButton">Fight</button>
+                <button id="actionButton">Heal</button>
+                <button id="evadeButton">Dodge</button>
+                <button id="mercyButton">Mercy</button>
+            </div>
+
+            <div id="combatSkills" style="display: none;"></div>
+        </div>
+
+        <div class="active-slot" id="activeSlot" style="display: none;">Active Card Slot</div>
+
+        <div class="modal" id="inventoryModal" style="display: none;">
+            <div class="modal-content">
+                <h2>Inventory</h2>
+                <div class="inventory">
+
+                    <div id="physicalWeapons">
+                        <h3>Physical Weapons</h3>
+                        <div class="cardrow">
+                            <div class="card effect-shine" data-type="light_melee">Light Melee</div>
+                            <div class="card mid effect-shine" data-type="medium_melee">Medium Melee</div>
+                            <div class="card hvy effect-shine" data-type="heavy_melee">Heavy Melee</div>
+                        </div>
+                    </div>
+
+                    <div id="magicWeapons">
+                        <h3>Magic Weapons</h3>
+                        <div class="cardrow">
+                            <div class="card" data-type="fire_magic" onclick="flipCard(this)">
+                                <div class="card-inner">
+                                    <div class="front"></div>
+                                    <div class="fback">
+                                        <h5>Fire Magic</h5>
+                                        <h6>Firepower is the capacity to deliver destructive force effectively using weapons, energy, or explosive capabilities.</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" data-type="ice_magic" onclick="flipCard(this)">
+                                <div class="card-inner">
+                                    <div class="front"></div>
+                                    <div class="back">
+                                        <h5>Ice Magic</h5>
+                                        <h6>Harnesses the power of frost and cold, enabling users to freeze objects and summon blizzards.</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" data-type="lightning_magic" onclick="flipCard(this)">
+                                <div class="card-inner">
+                                    <div class="front"></div>
+                                    <div class="lback">
+                                        <h5>Lightning Power</h5>
+                                        <h6>Delivers devastating, precise electrical strikes, overwhelming foes with immense energy bursts.</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="enemyCounter">Enemies Defeated: 0</div>
+                <button id="closeModal">Close Inventory</button>
+            </div>
+        </div>
+
+        <div id="gameOverScreen" style="display: none;">
+            <h1>Game Over</h1>
+            <p>You tried your best!</p>
+            <button id="restartGame">Restart Game</button>
+        </div>
+
+    </div>
+
+    <script src="js/test.js"></script>
+</body>
+</html>
