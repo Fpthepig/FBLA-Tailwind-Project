@@ -213,6 +213,11 @@ document.addEventListener("keydown", (event) => {
     player.style.left = `${newX}px`;
     player.style.top = `${newY}px`;
 
+    function updatePlayerPosition() {
+        player.style.left = `${playerPosition.x}px`;
+        player.style.top = `${playerPosition.y}px`;
+    }
+
     // Check if player collides with an enemy
     const enemy = checkCollisionWithEnemies();
     if (enemy) {
@@ -273,7 +278,14 @@ enemies.forEach((enemy) => {
         stopEnemySound();
         startCombat(enemyType);
     });
-});
+}); 
+
+function startCombat(enemyType) {
+    if (!enemyData[enemyType]) {
+        console.error("Invalid enemy type:", enemyType);
+        return;
+    } 
+}
 
 function startCombat(enemyType) {
     currentEnemyType = enemyType;
