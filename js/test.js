@@ -6,6 +6,9 @@
 // }
 
 let playerHealth = 100;
+let playerPosition = { x: 0, y: 0};
+let spawnPoint = { x: 0, y: 0} 
+let isSpawnSet = false;
 let activeWeapon = null;
 let enemyHealth = 100;
 let enemiesDefeated = 0;
@@ -13,6 +16,8 @@ let playerCharity = 1; // Player's Charity resource
 let currentEnemyType = null;
 let enemiesSpared = 0; // New global variable for spared enemies
 let loreIndex = 0; 
+let isInEncounter = false ;
+let secretTriggered = false;
 
 
 const enemyData = {
@@ -45,7 +50,7 @@ const enemyData = {
         skillLore: "The Skeleton Knight crumbles under your skillful assault.",
     },
 };
-
+const player = document.getElementById("player");
 const playerHealthDisplay = document.getElementById("playerHealthDisplay");
 const enemyCounter = document.getElementById("enemyCounter");
 const equippedWeaponDisplay = document.getElementById('equippedWeapon');
@@ -71,7 +76,8 @@ const loreContent = document.getElementById("loreContent");
 const prevButton = document.getElementById("prevButton");
 const nextButton = document.getElementById("nextButton");
 const closeLoreModal = document.getElementById("closeLoreModal");
- 
+const secret = document.getElementById("secret");
+
 
 const slimeSound = new Audio('mp3/slime-monster-noises-66776.mp3'); 
 slimeSound.preload = 'auto'; 
@@ -89,7 +95,57 @@ const sKSound = new Audio('mp3/Boss-song.mp3');
 sKSound.preload = 'auto';
 sKSound.loop = true;
 
- 
+function checkSecretTrigger(){
+    if(secretTriggered) return;
+
+    const playerRect = player.getBoundingClientRect();
+    const secretRect = secret.getBoundingClientRect();
+
+    if(
+     playerRect.right > secretRect.left && 
+     playerRect.left < secretRect.right &&
+     playerRect.bottom > secretRect.top && 
+     playerRect.top <secretRect.bottom
+    ) {
+        triggerSecret();
+    }
+}
+
+function triggerSecret(){
+    secretTriggered = true;
+
+    alert("you have found the secret!");
+}
+
+function setSpawnPoint(){
+if (isSpawnSet) return;
+
+
+const screenWidth = window.innerWidth
+const screenHeight = window.innerHeight;
+
+
+spawnPoint = {
+x: screenWidth / 2,
+y: screenHeight / 2
+}; 
+
+playerPosition = {...spawnPoint};
+updatePlayerPosition();
+
+isSpawnSet = true;
+
+}
+
+window.addEventListener("load", () => {
+    setSpawnPoint();
+});
+
+window.addEventListener(
+"resize", () => {
+    isSpawnSet = false;
+    setSpawnPoint();
+});
 // Add Charity Display
 playerCharityDisplay.id = "playerCharityDisplay";
 playerCharityDisplay.textContent = `Charity: ${playerCharity}`;
@@ -99,7 +155,9 @@ combatArea.prepend(playerCharityDisplay);
 const sparedCounter = document.createElement("div");
 sparedCounter.id = "sparedCounter";
 sparedCounter.textContent = `Enemies Spared: ${enemiesSpared}`;
-inventoryModal.appendChild(sparedCounter);
+inventoryModal.appendChild(sparedCounter); 
+
+
 
 // Weapon Cards
 
@@ -133,7 +191,77 @@ weaponCards.forEach((card) => {
         activeCardSlot.textContent = `Active Weapon: ${activeWeapon}`;
         inventoryModal.style.display = "none";
     });
-});
+}); 
+
+function updatePlayerPosition(){
+    player.style.left = `${playerPosition.x}px`;
+    player.style.top = `${playerPosition.y}px`;
+}
+ 
+document.addEventListener("keydown", (event) =>{
+    let newX = playerPosition.x;
+    let newY = playerPosition.y;  
+
+     // Movement controls
+     if (event.key === "w") newY -= moveSpeed; // Move up
+     if (event.key === "s") newY += moveSpeed; // Move down
+     if (event.key === "a") newX -= moveSpeed; // Move left
+     if (event.key === "d") newX += moveSpeed; // Move right
+ 
+     // Temporarily move player to check for collision
+     player.style.left = `${newX}px`;
+     player.style.top = `${newY}px`;
+ 
+     // Check if player collides with an enemy
+     const enemy = checkCollisionWithEnemies();
+     if (enemy) {
+         if (!activeCardSlot) {
+             alert("Equip a weapon before engaging in combat!");
+             teleportToSpawn();
+             return;
+         }
+         startCombat(enemy);
+         return;
+     }
+     // Check if player triggers the secret
+     checkSecretTrigger();
+ 
+     // If no collision, update player position
+     playerPosition.x = newX;
+     playerPosition.y = newY;
+     updatePlayerPosition();
+
+
+}); 
+
+function checkCollisionWithEnemies() {
+    const playerRect = player.getBoundingClientRect();
+
+    // Get all enemies inside the #enemies div
+    const enemyContainer = document.getElementById("enemies");
+    const enemies = enemyContainer.querySelectorAll(".enemy");
+
+    // Loop through each enemy and check for collision
+    return Array.from(enemies).find((enemy) => {
+        const enemyRect = enemy.getBoundingClientRect();
+
+        // Check for overlap in bounding boxes
+        return !(
+            playerRect.right < enemyRect.left ||
+            playerRect.left > enemyRect.right ||
+            playerRect.bottom < enemyRect.top ||
+            playerRect.top > enemyRect.bottom
+        );
+    });
+}
+
+// Function to teleport player back to spawn
+function teleportToSpawn() {
+    playerPosition = { ...spawnPoint };
+    updatePlayerPosition();
+}
+
+
 
 // Enemy Interactions
 enemies.forEach((enemy) => {

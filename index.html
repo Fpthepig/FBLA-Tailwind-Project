@@ -205,7 +205,18 @@
 
     card-text{
       transform: rotateY(180deg);
-    }
+    } 
+
+    #player {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgb(112, 112, 215);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 
     </style>
@@ -213,6 +224,7 @@
   </head>
   <body class="font-sans bg-black text-white m-0 p-0 flex flex-col items-center justify-center h-screen overflow-hidden">
     <div id="game" class = " relative w-4/5 h-4/5 border-2 border-white bg-gray-900 flex flex-col justify-between " >
+      <div id="player"></div>
       <div id="activeCardSlot" class = " absolute top-2.5 left-2.5 bg-black bg-opacity-70 p-2.5 rounded-lg">Active Weapon: None</div>
 
       <div id="playerHealthDisplay" class = " absolute top-2.5 right-2.5 bg-black bg-opacity-70 p-2.5 rounded-lg">Health: 100</div>
@@ -222,8 +234,16 @@
         - Press <strong>I</strong> to open the inventory<br />
         - Press <strong>K</strong> to open Lore Menu. <br />
         - Press <strong>P</strong> to toggle Controls visibility. <br />
-        - Left-click an enemy cube to start combat.
-      </div>
+        - Left-click an enemy cube to start combat. <br/>
+        - Tap WASD to move up/down/left/right.
+      <br>
+        - Hold WASD to run up/down/left/right.
+      <br>
+        - Re-click the fight button after every attack
+      <br>
+        -in order to reload the options
+    </div>
+      
 
       <div id="enemies" class = "flex justify-around mt-12">
         <div class="enemy w-24 h-24 bg-gray-500 text-center leading-[50px] cursor-pointer border border-white" data-type="Slime">Slime</div>
