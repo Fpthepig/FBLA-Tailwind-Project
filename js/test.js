@@ -96,56 +96,61 @@ const sKSound = new Audio('mp3/Boss-song.mp3');
 sKSound.preload = 'auto';
 sKSound.loop = true;
 
-function checkSecretTrigger(){
-    if(secretTriggered) return;
+function checkSecretTrigger() {
+    if (secretTriggered) return; // Prevent triggering again
 
     const playerRect = player.getBoundingClientRect();
     const secretRect = secret.getBoundingClientRect();
 
-    if(
-     playerRect.right > secretRect.left && 
-     playerRect.left < secretRect.right &&
-     playerRect.bottom > secretRect.top && 
-     playerRect.top <secretRect.bottom
+    // Check if player collides with the secret element
+    if (
+        playerRect.right > secretRect.left &&
+        playerRect.left < secretRect.right &&
+        playerRect.bottom > secretRect.top &&
+        playerRect.top < secretRect.bottom
     ) {
         triggerSecret();
     }
 }
 
-function triggerSecret(){
-    secretTriggered = true;
-
-    alert("you have found the secret!");
+function triggerSecret() {
+    secretTriggered = true; // Set the flag to prevent further triggers
+    alert("You have found the secret!"); // Display an alert or handle the secret's effects here
 }
 
-function setSpawnPoint(){
-if (isSpawnSet) return;
+// Function to set the spawn point at the center of the screen
+function setSpawnPoint() {
+    // Check if spawn point is already set
+    if (isSpawnSet) return;
 
+    // Get the screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-const screenWidth = window.innerWidth
-const screenHeight = window.innerHeight;
+    // Calculate the spawn point to center the player
+    spawnPoint = {
+        x: screenWidth / 2,
+        y: screenHeight / 2
+    };
 
+    // Update the playerPosition and apply the new spawn point
+    playerPosition = { ...spawnPoint };
+    updatePlayerPosition(); // Update the visual position of the player on the screen
 
-spawnPoint = {
-x: screenWidth / 2,
-y: screenHeight / 2
-}; 
-
-playerPosition = {...spawnPoint};
-updatePlayerPosition();
-
-isSpawnSet = true;
-
+    // Set the flag to true so the spawn point is only set once
+    isSpawnSet = true;
 }
 
+// Call the function to set spawn point when the page loads
 window.addEventListener("load", () => {
-    setSpawnPoint();
+    setSpawnPoint();  // Center player on page load
 });
 
-window.addEventListener(
-"resize", () => {
-    isSpawnSet = false;
-    setSpawnPoint();
+// Optionally, re-center player on window resize
+window.addEventListener("resize", () => {
+    // Reset the spawn point only if the window has been resized
+    isSpawnSet = false; // Allow the spawn point to reset
+    setSpawnPoint();  // Recalculate spawn point when the screen size changes
 });
 // Add Charity Display
 playerCharityDisplay.id = "playerCharityDisplay";
@@ -194,46 +199,39 @@ weaponCards.forEach((card) => {
     });
 }); 
 
-function updatePlayerPosition(){
-    player.style.left = `${playerPosition.x}px`;
-    player.style.top = `${playerPosition.y}px`;
-}
- 
-document.addEventListener("keydown", (event) =>{
+document.addEventListener("keydown", (event) => {
     let newX = playerPosition.x;
-    let newY = playerPosition.y;  
+    let newY = playerPosition.y;
 
-     // Movement controls
-     if (event.key === "w") newY -= moveSpeed; // Move up
-     if (event.key === "s") newY += moveSpeed; // Move down
-     if (event.key === "a") newX -= moveSpeed; // Move left
-     if (event.key === "d") newX += moveSpeed; // Move right
- 
-     // Temporarily move player to check for collision
-     player.style.left = `${newX}px`;
-     player.style.top = `${newY}px`;
- 
-     // Check if player collides with an enemy
-     const enemy = checkCollisionWithEnemies();
-     if (enemy) {
-         if (!activeCardSlot) {
-             alert("Equip a weapon before engaging in combat!");
-             teleportToSpawn();
-             return;
-         }
-         startCombat(enemy);
-         return;
-     }
-     // Check if player triggers the secret
-     checkSecretTrigger();
- 
-     // If no collision, update player position
-     playerPosition.x = newX;
-     playerPosition.y = newY;
-     updatePlayerPosition();
+    // Movement controls
+    if (event.key === "w") newY -= moveSpeed; // Move up
+    if (event.key === "s") newY += moveSpeed; // Move down
+    if (event.key === "a") newX -= moveSpeed; // Move left
+    if (event.key === "d") newX += moveSpeed; // Move right
 
+    // Temporarily move player to check for collision
+    player.style.left = `${newX}px`;
+    player.style.top = `${newY}px`;
 
-}); 
+    // Check if player collides with an enemy
+    const enemy = checkCollisionWithEnemies();
+    if (enemy) {
+        if (!activeCardSlot) {
+            alert("Equip a weapon before engaging in combat!");
+            teleportToSpawn();
+            return;
+        }
+        startCombat(enemy);
+        return;
+    }
+    // Check if player triggers the secret
+    checkSecretTrigger();
+
+    // If no collision, update player position
+    playerPosition.x = newX;
+    playerPosition.y = newY;
+    updatePlayerPosition();
+});
 
 function checkCollisionWithEnemies() {
     const playerRect = player.getBoundingClientRect();
