@@ -8,7 +8,8 @@
 let playerHealth = 100;
 let playerPosition = { x: 0, y: 0};
 let spawnPoint = { x: 0, y: 0} 
-let isSpawnSet = false;
+let isSpawnSet = false; 
+const moveSpeed = 10;
 let activeWeapon = null;
 let enemyHealth = 100;
 let enemiesDefeated = 0;
