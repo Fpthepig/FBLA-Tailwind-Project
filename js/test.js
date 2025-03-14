@@ -237,28 +237,27 @@ document.addEventListener("keydown", (event) => {
     playerPosition.y = newY;
     updatePlayerPosition();
 });
+function checkCollisionWithEnemies() { 
 
-function checkCollisionWithEnemies() {
-    const playerRect = player.getBoundingClientRect();
+const playerRect = player.getBoundingClientRect();
+const enemes = document.querySelectorAll(".enemy");
 
-    // Get all enemies inside the #enemies div
-    const enemyContainer = document.getElementById("enemies");
-    const enemies = enemyContainer.querySelectorAll(".enemy");
+for (const enemy of enemes) {
+    const enemyRect = enemy.getBoundingClientRect();
 
-    // Loop through each enemy and check for collision
-    return Array.from(enemies).find((enemy) => {
-        const enemyRect = enemy.getBoundingClientRect();
-
-        // Check for overlap in bounding boxes
-        return !(
-            playerRect.right < enemyRect.left ||
-            playerRect.left > enemyRect.right ||
-            playerRect.bottom < enemyRect.top ||
-            playerRect.top > enemyRect.bottom
-        );
-    });
+    if (
+        playerRect.right > enemyRect.left &&
+        playerRect.left < enemyRect.right &&
+        playerRect.bottom > enemyRect.top &&
+        playerRect.top < enemyRect.bottom
+    ) {
+        const enemyType = enemy.getAttribute("data-type");
+        console.log("Collided with enemy:", enemyType); // Debug
+        return enemyType; // Return the enemy type
+    }
 }
-
+return null; // No collision
+}
 // Function to teleport player back to spawn
 function teleportToSpawn() {
     playerPosition = { ...spawnPoint };
