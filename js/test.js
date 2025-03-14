@@ -278,16 +278,18 @@ enemies.forEach((enemy) => {
         stopEnemySound();
         startCombat(enemyType);
     });
-}); 
+});  
 
-function startCombat(enemyType) {
+
+
+function startCombat(enemyType) { 
+         
+    console.log("Enemy Type:", enemyType);
+
     if (!enemyData[enemyType]) {
         console.error("Invalid enemy type:", enemyType);
         return;
     } 
-}
-
-function startCombat(enemyType) {
     currentEnemyType = enemyType;
     enemyHealth = enemyData[enemyType].health;
     combatEnemyHealth.textContent = `Enemy Health: ${enemyHealth}`;
