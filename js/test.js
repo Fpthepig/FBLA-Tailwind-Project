@@ -184,6 +184,10 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "p" || e.key === "P") {
         const controlsTab = document.getElementById("controls");
         controlsTab.style.display = (controlsTab.style.display === "none") ? "block" : "none";
+    } 
+
+    if (e.key === "u" || e.key === "U"){
+          window.location.href = "https://favianp.github.io/digital-portfolio/";
     }
 });
 closeInventory.addEventListener("click", () => {
